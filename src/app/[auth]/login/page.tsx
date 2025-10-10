@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Formik, Form, Field, ErrorMessage } from "formik";
@@ -18,16 +19,36 @@ interface LoginFormValues {
 
 export default function LoginPage() {
   const router = useRouter();
+  const [error, setError] = useState("");
+
+  // 🔹 Data dummy users (3 role)
+  const users = [
+    { email: "admin@gmail.com", password: "123456", role: "admin" },
+    { email: "cashier@gmail.com", password: "123456", role: "cashier" },
+    { email: "customer@gmail.com", password: "123456", role: "customer" },
+  ];
 
   const initialValues: LoginFormValues = {
     email: "",
     password: "",
   };
 
+  // 🔹 Handle submit pakai Formik
   const handleSubmit = async (values: LoginFormValues) => {
-    console.log("login payload:", values);
+    const foundUser = users.find(
+      (u) => u.email === values.email && u.password === values.password
+    );
 
-    router.push("/page");
+    if (foundUser) {
+      localStorage.setItem("user", JSON.stringify(foundUser));
+
+      // Arahkan sesuai role
+      if (foundUser.role === "admin") router.push("/admin");
+      else if (foundUser.role === "cashier") router.push("/cashier");
+      else router.push("/customer");
+    } else {
+      setError("Email atau password salah!");
+    }
   };
 
   return (
@@ -41,7 +62,6 @@ export default function LoginPage() {
           style={{ objectFit: "cover" }}
           priority
         />
-        {/* overlay gelap untuk kontras */}
         <div className="absolute inset-0 bg-black/55" />
       </div>
 
@@ -50,9 +70,8 @@ export default function LoginPage() {
           <div className="text-center mb-8 text-white">
             <h1 className="text-4xl font-semibold">Welcome!</h1>
             <p className="mt-3 max-w-2xl mx-auto text-sm opacity-90">
-              Begin your curated dining journey with us create an account to
-              unlock priority reservations and tailored recommendations made
-              just for you.
+              Begin your curated dining journey with us — log in to access your
+              dashboard and manage your reservations.
             </p>
           </div>
 
@@ -99,6 +118,13 @@ export default function LoginPage() {
                           )}
                         </ErrorMessage>
                       </div>
+
+                      {/* Error login */}
+                      {error && (
+                        <p className="text-sm text-center text-rose-500">
+                          {error}
+                        </p>
+                      )}
 
                       {/* Submit */}
                       <div>
