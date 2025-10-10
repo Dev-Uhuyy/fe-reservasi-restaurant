@@ -1,5 +1,7 @@
 import {
   Armchair,
+  CalendarCheck,
+  ClipboardCheck,
   Home,
   Microwave,
   SquareMenu,
@@ -37,9 +39,9 @@ const items = [
   },
 
   {
-    title: "Table Management",
+    title: "Reservation Management",
     url: "#",
-    icon: Armchair,
+    icon: ClipboardCheck,
   },
 ];
 
