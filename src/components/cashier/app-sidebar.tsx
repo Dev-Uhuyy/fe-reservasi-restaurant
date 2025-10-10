@@ -1,12 +1,7 @@
 import {
-  Armchair,
-  CalendarCheck,
   ClipboardCheck,
   Home,
-  Microwave,
   SquareMenu,
-  Wallet,
-  Warehouse,
 } from "lucide-react";
 
 import {
@@ -16,7 +11,6 @@ import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
