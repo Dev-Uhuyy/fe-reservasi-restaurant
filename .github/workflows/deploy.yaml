@@ -1,0 +1,82 @@
+name: Deploy Frontend to Server
+
+on:
+  push:
+    branches:
+      - development
+      - production
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout source code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Install Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Clean npm cache and lock
+        run: |
+          rm -rf node_modules package-lock.json
+          npm cache clean --force
+
+      # 3. Install dependencies
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Install Rollup explicitly
+        run: npm install rollup --save-dev
+
+      - name: Create .env file
+        run: |
+          if [ "${{ github.ref }}" == "refs/heads/production" ]; then
+            echo "🟢 Production build"
+            echo "NEXT_PUBLIC_BASE_URL_API=${{ secrets.NEXT_PUBLIC_BASE_URL_API_PROD }}" >> .env
+          else
+            echo "🟡 Development build"
+            echo "NEXT_PUBLIC_BASE_URL_API=${{ secrets.NEXT_PUBLIC_BASE_URL_API_DEV }}" >> .env
+          fi
+
+      # 4. Build project
+      - name: Build project
+        run: npm run build
+
+      - name: Test SSH Connection
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: echo "✅ SSH OK"
+
+      # 5. Kirim hasil build ke server
+      - name: Deploy to Server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "dist/*"
+          target: "/tmp/deploy/fe_btng2025"
+
+       # 6. Jalankan deploy.sh di server
+      - name: Run deploy script
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+              if [ "${{ github.ref }}" == "refs/heads/production" ]; then
+                echo "🟢 Running production deploy script"
+                bash /var/www/lms/fe-restaurant-production-deploy.sh
+              else
+                echo "🟡 Running development deploy script"
+                bash /var/www/lms/fe-restaurant-development-deploy.sh
+              fi
