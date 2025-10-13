@@ -37,7 +37,7 @@ export default function Navbar() {
 
         {menuOpen && (
           <div className="absolute right-0 mt-2 bg-white shadow-lg rounded-md overflow-hidden z-50">
-            <a href="#" className="block px-4 py-2 hover:bg-gray-100">Reserve Now</a>
+            <a href="/auth/login" className="block px-4 py-2 hover:bg-gray-100">Reserve Now</a>
             <a href="#" className="block px-4 py-2 hover:bg-gray-100">History</a>
             <a href="#" className="block px-4 py-2 hover:bg-gray-100">Profile</a>
             <hr />

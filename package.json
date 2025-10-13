@@ -5,20 +5,19 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
+    "export": "next export",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
-<<<<<<< HEAD
     "@radix-ui/react-alert-dialog": "^1.1.15",
-=======
     "@radix-ui/react-label": "^2.1.7",
     "@radix-ui/react-slot": "^1.2.3",
     "axios": "^1.12.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "formik": "^2.4.6",
->>>>>>> f429ef966712e140231e0ad4081998fe500a0843
+    "@radix-ui/react-alert-dialog": "^1.1.15",
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-label": "^2.1.7",
     "@radix-ui/react-separator": "^1.1.7",
@@ -27,6 +26,7 @@
     "axios": "^1.12.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "formik": "^2.4.6",
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.545.0",
     "next": "^15.5.4",
