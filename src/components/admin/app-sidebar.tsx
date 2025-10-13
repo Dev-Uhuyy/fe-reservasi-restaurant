@@ -47,7 +47,7 @@ const items = [
   },
   {
     title: "Table Management",
-    url: "#",
+    url: "/admin/tables",
     icon: Armchair,
   },
   {
