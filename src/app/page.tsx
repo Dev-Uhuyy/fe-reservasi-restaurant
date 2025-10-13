@@ -1,103 +1,120 @@
 import Image from "next/image";
+import Navbar from "@/app/components/navbar";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <main className="bg-[#F8F6EB] min-h-screen text-[#1D3B2A]">
+      <Navbar />
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      {/* Hero Section */}
+      <section id="hero" className="px-10 py-10"></section>
+      <section className="relative h-[90vh] flex flex-col justify-end px-10 pb-20 overflow-hidden">
+        <Image
+          src="/images/hero.jpg"
+          alt="Restaurant" fill
+          className="object-cover brightness-32 z-0"
+        />
+      <div className="max-w-2xl relative z-10 pl-5">
+        <h1 className="text-8xl font-playfair font-bold text-white leading-tight">
+          Fresh,<br />
+          fast &<br />
+          flavorful !
+        </h1>
+          <p className="text-white mt-4 text-lg">
+            Bento Resto presents an authentic taste of Indonesian cuisine with a modern touch, offering a variety of delicious dishes made from the finest quality ingredients. With a cozy atmosphere and friendly service, Bento is the perfect choice for daily dining, family gatherings, or special occasions.
+          </p>
+    <Button className="mt-6 bg-[#E0A800] text-black font-semibold rounded-xl px-6 py-3 hover:bg-[#cf9600]">
+      Reserve Now !
+    </Button>
+  </div>
+</section>
+
+
+      {/* About Section */}
+      <section id="about"></section>
+         <section className="bg-[#fff7e6] py-16 px-6 md:px-20">
+      <div className="container mx-auto flex flex-col md:flex-row items-center gap-8">
+        {/* Gambar kiri  */}
+        <div className="relative w-full md:w-1/2">
+          <Image
+            src="/images/about_us1.jpeg"
+            alt="Bento Restaurant Interior"
+            width={600}
+            height={400}
+            className="rounded-md object-cover w-full h-[600px]"
+          />
+          <div className="absolute top-6 left-6 bg-[#FFB200] bg-opacity-90 text-[#2b2b2b] p-6 rounded-md shadow-lg max-w-md">
+            <h2 className="text-3xl font-semibold mb-4">About Us</h2>
+            <p className="text-justify mb-3">
+              At Bento Resto, we bring the authentic flavors of Indonesian cuisine to life with a contemporary twist.
+            </p>
+            <p className="text-justify">
+              Our dishes are crafted from the finest ingredients, combining traditional recipes with modern presentation to create an unforgettable dining experience. We believe that great food brings people together — and at Bento, every meal tells a story of flavor, passion, and culture.
+            </p>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+
+        {/* Gambar kanan */}
+        <div className="w-full md:w-1/2">
           <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+            src="/images/sate.jpeg"
+            alt="Sate Dish"
+            width={500}
+            height={400}
+            className="rounded-md object-cover w-full h-[600px]"
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        </div>
+      </div>
+    </section>
+
+        {/* Menu Section */}
+          <section id="menu" className="bg-[#F8F6EB] py-20 px-6 md:px-20 text-center">
+            <h2 className="text-4xl font-bold mb-8 text-[#1D3B2A]">Our Menu</h2>
+              <p className="text-2xl  text-[#4a4a4a] mb-10">
+                  Explore our digital menu book below. Flip through to discover our delicious dishes and drinks!
+              </p>
+
+        {/* Embed FlipHTML5 */}
+          <div className="flex justify-center">
+            <iframe
+              src="https://online.fliphtml5.com/liana/bcfm/"
+              width="80%"
+              height="600"
+              seamless
+              scrolling="no"
+              frameBorder="0"
+              allowFullScreen
+              className="rounded-lg shadow-lg"
+            ></iframe>
+          </div>
+        </section>
+
+      
+  
+
+      {/* Venue Section */}
+      <section id="venue" className="px-19 py-19">
+        <h2 className="text-3xl font-bold mb-8">Venue</h2>
+        <div className="grid md:grid-cols-2 gap-10">
           <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
+            src="/images/floor1.png"
+            alt="Floor 1"
+            width={600}
+            height={400}
+            className="rounded-lg object-cover"
           />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+          <div className="bg-[#E0A800] p-8 rounded-lg text-[#1D3B2A] font-medium text-2xl">
+            <h3 className="text-3xl font-semibold mb-3">Floor 1</h3>
+            <p>
+              Welcome to a space that is open, airy, and buzzing with positive energy.
+              Our modern-industrial design embraces natural light, clean lines, and a refreshing
+              connection to nature — perfect for gathering, connecting, and enjoying great food
+              in a lively setting.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }
