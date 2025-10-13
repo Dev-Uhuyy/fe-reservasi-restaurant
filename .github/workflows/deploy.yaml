@@ -55,6 +55,9 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: echo "✅ SSH OK"
 
+      - name: Check dist folder
+        run: ls -la dist
+
       # 5. Kirim hasil build ke server
       - name: Deploy to Server
         uses: appleboy/scp-action@v0.1.7
