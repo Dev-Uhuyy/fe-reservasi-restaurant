@@ -1,4 +1,4 @@
-name: Deploy Frontend to Server
+name: Deploy Frontend (Next.js SSR)
 
 on:
   push:
@@ -15,24 +15,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Install Node.js
+      # 2. Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
+      # 3. Clean cache & install deps
       - name: Clean npm cache and lock
         run: |
           rm -rf node_modules package-lock.json
           npm cache clean --force
 
-      # 3. Install dependencies
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
-      - name: Install Rollup explicitly
-        run: npm install rollup --save-dev
-
+      # 4. Create .env
       - name: Create .env file
         run: |
           if [ "${{ github.ref }}" == "refs/heads/production" ]; then
@@ -43,10 +41,11 @@ jobs:
             echo "NEXT_PUBLIC_BASE_URL_API=${{ secrets.NEXT_PUBLIC_BASE_URL_API_DEV }}" >> .env
           fi
 
-      # 4. Build project
+      # 5. Build project
       - name: Build project
         run: npm run build
 
+      # 6. Test SSH Connection
       - name: Test SSH Connection
         uses: appleboy/ssh-action@v1.2.0
         with:
@@ -55,17 +54,17 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: echo "✅ SSH OK"
 
-      # 5. Kirim hasil build ke server
-      - name: Deploy to Server
+      # 7. Kirim seluruh project ke server (bukan dist/out, tapi full project)
+      - name: Upload project files
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          source: "dist/*"
-          target: "/tmp/deploy/fe_btng2025"
+          source: "./"
+          target: "/tmp/deploy/dev-fe-restaurant"
 
-       # 6. Jalankan deploy.sh di server
+      # 8. Jalankan deploy script di server
       - name: Run deploy script
         uses: appleboy/ssh-action@v1.2.0
         with:
@@ -73,10 +72,10 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-              if [ "${{ github.ref }}" == "refs/heads/production" ]; then
-                echo "🟢 Running production deploy script"
-                bash /var/www/lms/fe-restaurant-production-deploy.sh
-              else
-                echo "🟡 Running development deploy script"
-                bash /var/www/lms/fe-restaurant-development-deploy.sh
-              fi
+            if [ "${{ github.ref }}" == "refs/heads/production" ]; then
+              echo "🟢 Running production deploy script"
+              bash /var/www/lms/fe-restaurant-production-deploy.sh
+            else
+              echo "🟡 Running development deploy script"
+              bash /var/www/lms/fe-restaurant-development-deploy.sh
+            fi
