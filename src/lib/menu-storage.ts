@@ -51,10 +51,10 @@ export function getMenuById(id: string): MenuItem | undefined {
 export function seedIfEmpty(): void {
   const all = getAllMenu();
   if (all.length === 0) {
-    const now = new Date().toISOString();
+    // const now = new Date().toISOString();
     saveAllMenu([
       {
-        menuId: crypto.randomUUID(),
+        id: crypto.randomUUID(),
         name: "Nasi Goreng Spesial",
         description: "Nasi goreng dengan topping ayam, telur, dan sayuran.",
         price: 25000,
@@ -65,7 +65,7 @@ export function seedIfEmpty(): void {
         imageUrl: "/menu-nasi-goreng.jpg",
       },
       {
-        menuId: crypto.randomUUID(),
+        id: crypto.randomUUID(),
         name: "Es Teh Manis",
         description: "Minuman teh manis dingin.",
         price: 8000,

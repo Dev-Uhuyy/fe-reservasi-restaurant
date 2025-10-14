@@ -3,7 +3,7 @@ import type { MenuItem } from "@/app/interface/admin/menu"
 // Sample static data to mirror categoryItems usage
 export const menuItems: MenuItem[] = [
   {
-    menuId: "m-1",
+    id: "m-1",
     name: "Grilled Chicken",
     description: "Juicy grilled chicken with herbs.",
     price: 45000,
@@ -14,7 +14,7 @@ export const menuItems: MenuItem[] = [
     imageUrl: "/placeholder.jpg",
   },
   {
-    menuId: "m-2",
+    id: "m-2",
     name: "Iced Tea",
     description: "Refreshing sweet iced tea.",
     price: 10000,
@@ -25,7 +25,7 @@ export const menuItems: MenuItem[] = [
     imageUrl: "/placeholder.jpg",
   },
   {
-    menuId: "m-3",
+    id: "m-3",
     name: "French Fries",
     description: "Crispy golden fries.",
     price: 20000,

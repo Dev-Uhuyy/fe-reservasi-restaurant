@@ -29,31 +29,31 @@ export default function TablesContent() {
   }
 
 
-  const getStatusBadge = (status: string) => {
-    let colorClass = ""
+  // const getStatusBadge = (status: string) => {
+  //   let colorClass = ""
 
-    switch (status.toLowerCase()) {
-      case "available":
-        colorClass = "bg-black text-white"
-        break
-      case "reserved":
-        colorClass = "bg-green-500 text-white"
-        break
-      case "occupied":
-        colorClass = "bg-red-600 text-white"
-        break
-      default:
-        colorClass = "bg-gray-400 text-white"
-    }
+  //   switch (status.toLowerCase()) {
+  //     case "available":
+  //       colorClass = "bg-black text-white"
+  //       break
+  //     case "reserved":
+  //       colorClass = "bg-green-500 text-white"
+  //       break
+  //     case "occupied":
+  //       colorClass = "bg-red-600 text-white"
+  //       break
+  //     default:
+  //       colorClass = "bg-gray-400 text-white"
+  //   }
 
-    return (
-      <span
-        className={`px-3 py-1 rounded-full text-xs font-medium ${colorClass}`}
-      >
-        {status}
-      </span>
-    )
-  }
+  //   return (
+  //     <span
+  //       className={`px-3 py-1 rounded-full text-xs font-medium ${colorClass}`}
+  //     >
+  //       {status}
+  //     </span>
+  //   )
+  // }
 
   return (
     <div className="p-6">

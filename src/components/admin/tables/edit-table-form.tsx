@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react"
 import { useRouter, useParams } from "next/navigation"
 import { useForm } from "react-hook-form"
-import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
@@ -37,7 +36,7 @@ const schema = yup.object().shape({
     .typeError("Max capacity must be a number")
     .required("Max capacity is required"),
   status: yup.string().required("Status is required"),
-  image: yup.mixed().required("Image is required"),
+  image: yup.mixed<string | File>(),
 })
 
 export default function EditTableForm() {
@@ -53,11 +52,38 @@ export default function EditTableForm() {
     setValue,
     watch,
     formState: { errors },
-  } = useForm({
-    resolver: yupResolver(schema),
-  })
+  } = useForm<TableData>(
+    {
+      defaultValues: {
+        name: "",
+        room: "",
+        minCapacity: 0,
+        maxCapacity: 0,
+        status: "",
+        image: "",
+      }, 
+      resolver: async (data) => {
+        try {
+          const validatedData = await schema.validate(data, { abortEarly: false });
+          return { values: validatedData, errors: {} };
+        } catch (validationErrors) {
+          const formErrors = (validationErrors as yup.ValidationError).inner.reduce(
+            (allErrors, currentError) => ({
+              ...allErrors,
+              [currentError.path as string]: {
+                type: currentError.type ?? "validation",
+                message: currentError.message,
+              },
+            }),
+            {}
+          );
 
-  
+          return { values: {}, errors: formErrors };
+        }
+      },
+    }
+  );
+
   useEffect(() => {
     const storedTables = localStorage.getItem("tables")
     const data = storedTables ? JSON.parse(storedTables) : mockTables
@@ -75,52 +101,65 @@ export default function EditTableForm() {
   }, [id, setValue])
 
   const handleImageChange = (file: File | null) => {
-  if (!file) return
-  const reader = new FileReader()
+    if (!file) return
+    const reader = new FileReader()
 
-  reader.onloadend = () => {
-    if (typeof reader.result === "string") {
-      setImagePreview(reader.result)
-      setValue("image", reader.result)
+    reader.onloadend = () => {
+      if (typeof reader.result === "string") {
+        setImagePreview(reader.result)
+        setValue("image", reader.result)
+      }
     }
+
+    reader.readAsDataURL(file)
   }
 
-  reader.readAsDataURL(file)
-}
 
-
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: TableData) => {
     try {
       const updatedTables = tables.map((t) =>
         String(t.id) === String(id)
           ? {
-              ...t,
-              name: data.name,
-              room: data.room,
-              minCapacity: data.minCapacity,
-              maxCapacity: data.maxCapacity,
-              status: data.status,
-              image: data.image || imagePreview,
-            }
+            ...t,
+            name: data.name,
+            room: data.room,
+            minCapacity: data.minCapacity,
+            maxCapacity: data.maxCapacity,
+            status: data.status,
+            image: data.image || imagePreview,
+          }
           : t
-      )
-      localStorage.setItem("tables", JSON.stringify(updatedTables))
-      setAlert({ type: "success", message: "Table updated successfully!" })
-      setTimeout(() => router.push("/admin/tables"), 1200)
+      );
+
+      localStorage.setItem("tables", JSON.stringify(updatedTables));
+
+      setAlert({
+        type: "success",
+        message: "Table updated successfully!",
+      });
+
+      setTimeout(() => router.push("/admin/tables"), 1200);
     } catch (error) {
-      setAlert({ type: "error", message: "Failed to update table!" })
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Failed to update table!";
+
+      setAlert({
+        type: "error",
+        message,
+      });
     }
-  }
+  };
 
   return (
     <div className="max-w-2xl mx-auto mt-8 bg-white p-6 rounded-xl shadow-md">
-     
+
 
       {alert && (
         <Alert
-          className={`mb-4 ${
-            alert.type === "success" ? "bg-green-100" : "bg-red-100"
-          }`}
+          className={`mb-4 ${alert.type === "success" ? "bg-green-100" : "bg-red-100"
+            }`}
         >
           <AlertTitle>{alert.type === "success" ? "Success" : "Error"}</AlertTitle>
           <AlertDescription>{alert.message}</AlertDescription>

@@ -80,7 +80,7 @@ export default function TableMenu() {
   const handleDelete = (id: string | undefined) => {
     if (!id) return;
     removeMenu(id);
-    setItems((prev) => prev.filter((item) => item.menuId !== id));
+    setItems((prev) => prev.filter((item) => item.id !== id));
     setDeleteDialog({ open: false });
   };
 
@@ -141,7 +141,7 @@ export default function TableMenu() {
         </TableHeader>
         <TableBody>
           {filtered.map((item: MenuItem) => (
-            <TableRow key={item.menuId}>
+            <TableRow key={item.id}>
               <TableCell>
                 <div className="h-12 w-12 relative overflow-hidden rounded-md">
                   <Image
@@ -164,7 +164,7 @@ export default function TableMenu() {
                 {item.status === "active" ? "Active" : "Inactive"}
               </TableCell>
               <TableCell className="flex gap-2 justify-center items-center">
-                <a href={`/admin/menu/detail/${item.menuId}`}>
+                <a href={`/admin/menu/detail/${item.id}`}>
                   <Button type="button" className="cursor-pointer">
                     <SquarePen />
                     Edit
@@ -175,7 +175,7 @@ export default function TableMenu() {
                   variant="destructive"
                   className="cursor-pointer"
                   onClick={() =>
-                    setDeleteDialog({ open: true, id: item.menuId, name: item.name })
+                    setDeleteDialog({ open: true, id: item.id, name: item.name })
                   }
                 >
                   <Trash />

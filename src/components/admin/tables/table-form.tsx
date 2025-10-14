@@ -4,7 +4,6 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import * as yup from "yup"
 import { useForm } from "react-hook-form"
-import { yupResolver } from "@hookform/resolvers/yup"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -13,6 +12,7 @@ import { v4 as uuidv4 } from "uuid"
 import { TableData } from "@/app/interface/admin/table"
 import { mockTables } from "@/app/data/admin/table"
 import { mockRooms } from "@/app/data/admin/table"
+import Image from "next/image"
 
 
 export default function TableForm() {
@@ -22,10 +22,16 @@ export default function TableForm() {
   const schema = yup.object().shape({
     name: yup.string().required("Table name is required"),
     room: yup.string().required("Room is required"),
-    minCapacity: yup.number().required("Min capacity required"),
-    maxCapacity: yup.number().required("Max capacity required"),
-    status: yup.string().required("Status required"),
-    image: yup.mixed().required("Image required"),
+    minCapacity: yup
+      .number()
+      .typeError("Min capacity must be a number")
+      .required("Min capacity is required"),
+    maxCapacity: yup
+      .number()
+      .typeError("Max capacity must be a number")
+      .required("Max capacity is required"),
+    status: yup.string().required("Status is required"),
+    image: yup.mixed<string | File>(),
   })
 
   const {
@@ -34,7 +40,33 @@ export default function TableForm() {
     formState: { errors },
     setValue,
   } = useForm<TableData>({
-    resolver: yupResolver(schema),
+    defaultValues: {
+      name: "",
+      room: "",
+      minCapacity: 0,
+      maxCapacity: 0,
+      status: "",
+      image: "",
+    },
+    resolver: async (data) => {
+      try {
+        const validatedData = await schema.validate(data, { abortEarly: false })
+        return { values: validatedData, errors: {} }
+      } catch (validationError) {
+        const formErrors: Record<string, { type: string; message: string }> = {}
+        if (validationError instanceof yup.ValidationError) {
+          validationError.inner.forEach((error) => {
+            if (error.path) {
+              formErrors[error.path] = {
+                type: error.type ?? "validation",
+                message: error.message,
+              }
+            }
+          })
+        }
+        return { values: {}, errors: formErrors }
+      }
+    }
   })
 
   const onSubmit = (data: TableData) => {
@@ -142,7 +174,7 @@ export default function TableForm() {
                 />
                 <label htmlFor="image-upload" className="cursor-pointer">
                   {imagePreview ? (
-                    <img
+                    <Image
                       src={imagePreview}
                       alt="Preview"
                       className="mx-auto w-32 h-32 object-cover rounded-md"

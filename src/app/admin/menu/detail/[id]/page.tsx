@@ -10,7 +10,7 @@ import type { MenuItem } from "@/app/interface/admin/menu"
 
 export default function Page() {
   const params = useParams<{ id: string }>()
-  const current = useMemo<MenuItem | undefined>(() => menuItems.find((m) => m.menuId === params.id), [params.id])
+  const current = useMemo<MenuItem | undefined>(() => menuItems.find((m) => m.id === params.id), [params.id])
 
   return (
     <div>

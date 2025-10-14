@@ -1,7 +1,7 @@
 export type MenuStatus = "active" | "inactive"
 
 export interface MenuItem {
-  menuId: string
+  id: string
   name: string
   description: string
   price: number
@@ -10,4 +10,6 @@ export interface MenuItem {
   unit: string
   status: MenuStatus
   imageUrl?: string // public path or blob preview
+  createdAt?: string
+  updatedAt?: string
 }

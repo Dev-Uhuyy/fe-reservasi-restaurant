@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { ValidationError } from "yup";
 import {
   Select,
   SelectContent,
@@ -87,7 +88,7 @@ export default function FormMenu({
 
       if (mode === "create") {
         const newMenu: MenuItem = {
-          menuId: crypto.randomUUID(),
+          id: crypto.randomUUID(),
           name: formValues.name,
           description: formValues.description,
           price: Number(formValues.price),
@@ -98,7 +99,7 @@ export default function FormMenu({
           imageUrl: formValues.imagePreview || "/placeholder.jpg",
         };
         addMenu(newMenu);
-      } else if (mode === "edit" && initialData?.menuId) {
+      } else if (mode === "edit" && initialData?.id) {
         const updatedMenu: Partial<MenuItem> = {
           name: formValues.name,
           description: formValues.description,
@@ -109,7 +110,7 @@ export default function FormMenu({
           status: formValues.status,
           imageUrl: formValues.imagePreview,
         };
-        updateMenu(initialData.menuId, updatedMenu);
+        updateMenu(initialData.id, updatedMenu);
       }
 
       setAlert({
@@ -124,16 +125,15 @@ export default function FormMenu({
         router.push("/admin/menu");
       }, 600);
     } catch (err) {
-      if (
-        err instanceof Error &&
-        "name" in err &&
-        err.name === "ValidationError"
-      ) {
-        const validationError = err as any;
+      if (err instanceof ValidationError) {
         const fieldErrors: Record<string, string> = {};
-        validationError.inner.forEach((e: any) => {
-          if (e.path && !fieldErrors[e.path]) fieldErrors[e.path] = e.message;
+
+        err.inner.forEach((e) => {
+          if (e.path && !fieldErrors[e.path]) {
+            fieldErrors[e.path] = e.message;
+          }
         });
+
         setErrors(fieldErrors);
         setAlert({ type: "error", message: "Please check your inputs." });
       } else {
