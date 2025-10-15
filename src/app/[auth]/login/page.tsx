@@ -130,7 +130,7 @@ export default function LoginPage() {
                       <div>
                         <Button
                           type="submit"
-                          variant="primary"
+                          variant="default"
                           className="w-full"
                           disabled={isSubmitting}
                         >
