@@ -1,20 +1,10 @@
 import {
-  Armchair,
-  Home,
-  Microwave,
-  SquareMenu,
-  Wallet,
-  Warehouse,
-} from "lucide-react";
-
-import {
   Sidebar,
   SidebarHeader,
   SidebarFooter,
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -22,6 +12,10 @@ import {
 
 import Image from "next/image";
 import { Button } from "../ui/button";
+import { sidebarItems } from "@/app/data/admin/sidebar";
+import { SidebarItem } from "@/app/interface/admin/sidebar-item";
+import { Home, SquareMenu, Microwave, Warehouse, Armchair, Wallet } from "lucide-react"
+
 
 // Menu items.
 const items = [
@@ -69,7 +63,7 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
+              {sidebarItems.map((item: SidebarItem) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <a href={item.url}>

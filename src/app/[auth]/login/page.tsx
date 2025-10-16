@@ -1,40 +1,54 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { registerSchema } from "@/lib/validations/registerSchema";
+import { loginSchema } from "@/lib/validations/loginSchema";
 
-import {
-  Card,
-  CardContent,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
-interface RegisterFormValues {
-  name: string;
+interface LoginFormValues {
   email: string;
-  phone: string;
   password: string;
 }
 
-export default function RegisterPage() {
+export default function LoginPage() {
   const router = useRouter();
+  const [error, setError] = useState("");
 
-  const initialValues: RegisterFormValues = {
-    name: "",
+  // 🔹 Data dummy users (3 role)
+  const users = [
+    { email: "admin@gmail.com", password: "123456", role: "admin" },
+    { email: "cashier@gmail.com", password: "123456", role: "cashier" },
+    { email: "customer@gmail.com", password: "123456", role: "customer" },
+  ];
+
+  const initialValues: LoginFormValues = {
     email: "",
-    phone: "",
     password: "",
   };
 
-  const handleSubmit = async (values: RegisterFormValues) => {
-    console.log("register payload:", values);
+  // 🔹 Handle submit pakai Formik
+  const handleSubmit = async (values: LoginFormValues) => {
+    const foundUser = users.find(
+      (u) => u.email === values.email && u.password === values.password
+    );
 
-    router.push("/auth/login");
+    if (foundUser) {
+      localStorage.setItem("user", JSON.stringify(foundUser));
+
+      // Arahkan sesuai role
+      if (foundUser.role === "admin") router.push("/admin");
+      else if (foundUser.role === "cashier") router.push("/cashier");
+      else router.push("/customer");
+    } else {
+      setError("Email atau password salah!");
+    }
   };
 
   return (
@@ -48,7 +62,6 @@ export default function RegisterPage() {
           style={{ objectFit: "cover" }}
           priority
         />
-        {/* overlay gelap untuk kontras */}
         <div className="absolute inset-0 bg-black/55" />
       </div>
 
@@ -57,9 +70,8 @@ export default function RegisterPage() {
           <div className="text-center mb-8 text-white">
             <h1 className="text-4xl font-semibold">Welcome!</h1>
             <p className="mt-3 max-w-2xl mx-auto text-sm opacity-90">
-              Begin your curated dining journey with us create an account to
-              unlock priority reservations and tailored recommendations made
-              just for you.
+              Begin your curated dining journey with us — log in to access your
+              dashboard and manage your reservations.
             </p>
           </div>
 
@@ -68,27 +80,11 @@ export default function RegisterPage() {
               <CardContent className="px-6 pb-6">
                 <Formik
                   initialValues={initialValues}
-                  validationSchema={registerSchema}
+                  validationSchema={loginSchema}
                   onSubmit={handleSubmit}
                 >
                   {({ isSubmitting }) => (
                     <Form className="space-y-6">
-                      {/* Name */}
-                      <div className="space-y-2">
-                        <Label htmlFor="name">Name</Label>
-                        <Field
-                          as={Input}
-                          id="name"
-                          name="name"
-                          placeholder="Your name"
-                        />
-                        <ErrorMessage name="name">
-                          {(msg) => (
-                            <p className="text-sm text-rose-500">{msg}</p>
-                          )}
-                        </ErrorMessage>
-                      </div>
-
                       {/* Email */}
                       <div className="space-y-2">
                         <Label htmlFor="email">Email</Label>
@@ -100,22 +96,6 @@ export default function RegisterPage() {
                           placeholder="Your email address"
                         />
                         <ErrorMessage name="email">
-                          {(msg) => (
-                            <p className="text-sm text-rose-500">{msg}</p>
-                          )}
-                        </ErrorMessage>
-                      </div>
-
-                      {/* Phone */}
-                      <div className="space-y-2">
-                        <Label htmlFor="phone">Phone</Label>
-                        <Field
-                          as={Input}
-                          id="phone"
-                          name="phone"
-                          placeholder="Your phone number"
-                        />
-                        <ErrorMessage name="phone">
                           {(msg) => (
                             <p className="text-sm text-rose-500">{msg}</p>
                           )}
@@ -139,6 +119,13 @@ export default function RegisterPage() {
                         </ErrorMessage>
                       </div>
 
+                      {/* Error login */}
+                      {error && (
+                        <p className="text-sm text-center text-rose-500">
+                          {error}
+                        </p>
+                      )}
+
                       {/* Submit */}
                       <div>
                         <Button
@@ -147,14 +134,17 @@ export default function RegisterPage() {
                           className="w-full"
                           disabled={isSubmitting}
                         >
-                          {isSubmitting ? "Loading..." : "SIGN UP"}
+                          {isSubmitting ? "Loading..." : "SIGN IN"}
                         </Button>
                       </div>
 
                       <div className="text-center text-sm text-muted-foreground">
-                        Already have an account?{" "}
-                        <Link href="/auth/login" className="text-primary hover:text-primary/50">
-                          Sign in
+                        Don’t have an account?{" "}
+                        <Link
+                          href="/auth/register"
+                          className="text-primary hover:text-primary/50"
+                        >
+                          Sign up
                         </Link>
                       </div>
                     </Form>
