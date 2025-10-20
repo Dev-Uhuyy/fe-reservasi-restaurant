@@ -1,11 +1,11 @@
 export interface TableData {
-  id: string | number
+  id?: string | number
   name: string
   room: string
   minCapacity: number
   maxCapacity: number
   status: string
-  image?: File | string
+  image?: string | File
 }
 
 export interface RoomOption {

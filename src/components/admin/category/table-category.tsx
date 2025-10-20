@@ -26,6 +26,8 @@ function TableCategory({categories}: {categories?: CategoryItem[]}) {
     name?: string;
   }>({open: false})
 
+  console.log(categories);
+
   return (
     <div>
       <Table>
