@@ -143,7 +143,7 @@ export default function RegisterPage() {
                       <div>
                         <Button
                           type="submit"
-                          variant="default"
+                          variant="secondary"
                           className="w-full"
                           disabled={isSubmitting}
                         >

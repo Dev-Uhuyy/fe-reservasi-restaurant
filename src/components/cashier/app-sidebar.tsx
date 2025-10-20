@@ -34,7 +34,7 @@ const items = [
 
   {
     title: "Reservation Management",
-    url: "#",
+    url: "/cashier/orders/",
     icon: ClipboardCheck,
   },
 ];

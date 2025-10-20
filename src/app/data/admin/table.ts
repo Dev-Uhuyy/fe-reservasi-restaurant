@@ -27,12 +27,12 @@ export const mockTables: TableData[] = [
     image: "/images/table2.jpeg",
   },
     {
-    id: 2,
-    name: "Table A2",
+    id: 3,
+    name: "Table A3",
     room: "Outdoor",
     minCapacity: 4,
     maxCapacity: 6,
-    status: "reserved",
+    status: "occupied",
     image: "/images/table3.jpeg",
   },
 ]
